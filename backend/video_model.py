@@ -5,6 +5,7 @@ import os
 import time
 from youtube_video_downloader import download_video
 from pydantic import BaseModel
+import json
 
 load_dotenv()
 
@@ -15,8 +16,8 @@ client = genai.Client(api_key=API_KEY)
 # video_url = "https://youtu.be/KWgYha0clzw"
 
 class timeStamp(BaseModel):
-      a: str
-      p: str
+      timestamp: str
+      caption: str
       
 def get_video_timestamps(video_url):
       video_title = download_video(video_url)
@@ -32,7 +33,7 @@ def get_video_timestamps(video_url):
       response = client.models.generate_content(
       model="gemini-2.0-flash", contents = [myfile, """generate hyperlink timestamps for the events in this
                                                 video in clever way by chunking the video into sections and captioning each section. Let the caption be short and descriptive
-                                          your output should be in the format {<a>00:00</a>: <p>caption</p>} in an array.
+                                          your output should be in the format {<a>00:00</a>: <p>caption</p>} as a python list of dictionary elements.
                                                 """]
       ,config = types.GenerateContentConfig(
             response_mime_type='application/json',
@@ -63,5 +64,8 @@ def get_video_timestamps_url(video_url):
             )
             
       )
-      print(response.text)
+      print(json.loads(response.text))
       return response.text
+
+
+get_video_timestamps_url("https://youtu.be/KWgYha0clzw")

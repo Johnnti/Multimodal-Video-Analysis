@@ -24,7 +24,6 @@ class ChatRequest(BaseModel):
 async def process_video(req: VideoRequest):
     response = get_video_timestamps(req.url)
     return response
-
 @app.post("/process_url")
 async def process_video_url(req: VideoRequest):
     response = get_video_timestamps_url(req.url)
@@ -32,7 +31,7 @@ async def process_video_url(req: VideoRequest):
 
 @app.post("/chat")
 async def chat(req: ChatRequest):
-    # Placeholder: pretend GPT answered your query
+    
     return {
         "answer": f"Here's what I found in the video related to: '{req.query}' [timestamp: 60s]"
     }
